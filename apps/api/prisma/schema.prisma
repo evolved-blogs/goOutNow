@@ -1,0 +1,84 @@
+// Prisma Schema for Location-Based Post Sharing App
+// This schema follows clean architecture principles with clear separation of concerns
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// User entity - represents users who can create and join posts
+
+// Post entity - represents location-based activities
+// Stores geospatial coordinates for proximity searches
+model Post {
+    id            String   @id @default(uuid())
+    title         String
+    activityType  String // e.g., 'cricket', 'football', 'basketball'
+    latitude      Float // Decimal degrees for precise location
+    longitude     Float // Decimal degrees for precise location
+    scheduledTime DateTime // When the activity is planned
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    // Foreign Keys
+    createdById String // UUID of guest user
+
+    // Relations
+    members  PostMember[] @relation("PostMembers")
+    messages Message[]    @relation("PostMessages")
+
+    // Indexes for performance optimization
+    @@index([latitude, longitude]) // Composite index for geospatial queries
+    @@index([activityType]) // Filter by activity type
+    @@index([scheduledTime]) // Sort by schedule
+    @@index([createdById]) // User's posts lookup
+    @@map("posts")
+}
+
+// PostMember entity - represents users who have joined a post
+// Junction table for many-to-many relationship between Users and Posts
+model PostMember {
+    id       String   @id @default(uuid())
+    joinedAt DateTime @default(now())
+    postId   String
+    userId   String // UUID of guest user
+
+    // Relations
+    post Post @relation("PostMembers", fields: [postId], references: [id], onDelete: Cascade)
+
+    // Constraints
+    @@unique([postId, userId]) // Prevent duplicate memberships
+    @@index([userId]) // Lookup user's joined posts
+    @@map("post_members")
+}
+
+// Message entity - in-post chat so members can ask questions
+model Message {
+    id        String   @id @default(uuid())
+    postId    String
+    userId    String // UUID of guest user (sender)
+    text      String
+    createdAt DateTime @default(now())
+
+    // Relations
+    post Post @relation("PostMessages", fields: [postId], references: [id], onDelete: Cascade)
+
+    // Indexes
+    @@index([postId, createdAt]) // Fetch messages for a post in order
+    @@map("messages")
+}
+
+// GlobalMessage entity - app-wide lobby chat visible to all players
+model GlobalMessage {
+    id        String   @id @default(uuid())
+    userId    String // UUID of guest user (sender)
+    text      String
+    createdAt DateTime @default(now())
+
+    @@index([createdAt])
+    @@map("global_messages")
+}

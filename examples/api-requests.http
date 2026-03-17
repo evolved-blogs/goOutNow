@@ -1,0 +1,87 @@
+### Example API Requests
+### Use with REST Client extension in VS Code
+### Click "Send Request" above any request to execute it
+
+@baseUrl = http://localhost:3000/api
+
+### 1. Create a Post - Basketball Game
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "title": "Basketball Game at Central Park",
+  "activityType": "sports",
+  "latitude": 40.7829,
+  "longitude": -73.9654,
+  "scheduledTime": "2026-02-15T18:00:00Z",
+  "createdById": "user-123"
+}
+
+###
+
+### 2. Create a Post - Coffee Meetup
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "title": "Coffee & Code Session",
+  "activityType": "coffee",
+  "latitude": 40.7580,
+  "longitude": -73.9855,
+  "scheduledTime": "2026-02-01T10:00:00Z",
+  "createdById": "user-456"
+}
+
+###
+
+### 3. Create a Post - Dinner Party
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "title": "Basketball Pickup Game",
+  "activityType": "basketball",
+  "latitude": 40.7150,
+  "longitude": -74.0070,
+  "scheduledTime": "2026-02-01T15:00:00Z",
+  "createdById": "user-789"
+}
+
+###
+
+### 4. Get Nearby Posts (from user location)
+GET {{baseUrl}}/posts/nearby?latitude=40.7128&longitude=-74.0060
+
+###
+
+### 5. Get Nearby Posts (different location)
+GET {{baseUrl}}/posts/nearby?latitude=40.7580&longitude=-73.9855
+
+###
+
+### 6. Get Post by ID (replace with actual ID from create response)
+GET {{baseUrl}}/posts/{{postId}}
+
+###
+
+### 7. Join a Post (replace with actual IDs)
+POST {{baseUrl}}/posts/{{postId}}/join
+Content-Type: application/json
+
+{
+  "userId": "user-999"
+}
+
+###
+
+### 8. Get User's Posts
+GET {{baseUrl}}/posts/user/user-123
+
+###
+
+### Test Coordinates
+# New York City: 40.7128, -74.0060
+# Times Square: 40.7580, -73.9855
+# Central Park: 40.7829, -73.9654
+# Brooklyn: 40.6782, -73.9442
+# Queens: 40.7282, -73.7949

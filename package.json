@@ -1,0 +1,33 @@
+{
+  "name": "gooutnow",
+  "version": "1.0.0",
+  "description": "Location-based post sharing application built with NestJS, TypeScript, Prisma, and PostgreSQL",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter @gooutnow/api --filter @gooutnow/web dev",
+    "dev:api": "pnpm --filter @gooutnow/api start:dev",
+    "dev:web": "pnpm --filter @gooutnow/web dev",
+    "build": "pnpm --filter @gooutnow/api build && pnpm --filter @gooutnow/web build",
+    "build:api": "pnpm --filter @gooutnow/api build",
+    "build:web": "pnpm --filter @gooutnow/web build",
+    "start": "pnpm --filter @gooutnow/api start:prod",
+    "lint": "pnpm --recursive lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:migrate": "pnpm --filter @gooutnow/api prisma:migrate",
+    "db:generate": "pnpm --filter @gooutnow/api prisma:generate",
+    "db:studio": "pnpm --filter @gooutnow/api prisma:studio"
+  },
+  "keywords": [
+    "nestjs",
+    "typescript",
+    "prisma",
+    "postgresql",
+    "clean-architecture",
+    "monorepo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.17.1"
+}

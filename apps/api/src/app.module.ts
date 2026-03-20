@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PostModule } from './modules/post/post.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     // Feature modules
     PostModule,
     ChatModule,
+    FeedbackModule,
   ],
 })
 export class AppModule {}

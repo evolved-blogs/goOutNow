@@ -14,6 +14,12 @@ export const API_ENDPOINTS = {
     members: (id: string) => `${API_BASE_URL}/posts/${id}/members`,
     messages: (id: string) => `${API_BASE_URL}/posts/${id}/messages`,
     messagesStream: (id: string) => `${API_BASE_URL}/posts/${id}/messages/stream`,
+    feedback: (id: string) => `${API_BASE_URL}/posts/${id}/feedback`,
+    feedbackCheck: (id: string, userId: string) =>
+      `${API_BASE_URL}/posts/${id}/feedback/check?userId=${userId}`,
+  },
+  feedback: {
+    pending: (userId: string) => `${API_BASE_URL}/feedback/pending?userId=${userId}`,
   },
   chat: {
     list: `${API_BASE_URL}/chat`,

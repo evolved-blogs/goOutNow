@@ -15,21 +15,26 @@ datasource db {
 // Post entity - represents location-based activities
 // Stores geospatial coordinates for proximity searches
 model Post {
-    id            String   @id @default(uuid())
-    title         String
-    activityType  String // e.g., 'cricket', 'football', 'basketball'
-    latitude      Float // Decimal degrees for precise location
-    longitude     Float // Decimal degrees for precise location
-    scheduledTime DateTime // When the activity is planned
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+    id                   String   @id @default(uuid())
+    title                String
+    description          String? // Optional description of the activity
+    activityType         String // e.g., 'sports', 'music', 'social'
+    vibe                 String? // e.g., 'chill', 'energetic', 'creative'
+    latitude             Float // Decimal degrees for precise location
+    longitude            Float // Decimal degrees for precise location
+    scheduledTime        DateTime // When the activity is planned
+    requiredParticipants Int      @default(2) // How many people are needed
+    rolesNeeded          Json? // e.g., [{"role":"Guitarist","count":1}]
+    createdAt            DateTime @default(now())
+    updatedAt            DateTime @updatedAt
 
     // Foreign Keys
     createdById String // UUID of guest user
 
     // Relations
-    members  PostMember[] @relation("PostMembers")
-    messages Message[]    @relation("PostMessages")
+    members   PostMember[] @relation("PostMembers")
+    messages  Message[]    @relation("PostMessages")
+    feedbacks Feedback[]   @relation("PostFeedbacks")
 
     // Indexes for performance optimization
     @@index([latitude, longitude]) // Composite index for geospatial queries
@@ -70,6 +75,25 @@ model Message {
     // Indexes
     @@index([postId, createdAt]) // Fetch messages for a post in order
     @@map("messages")
+}
+
+// Feedback entity - joinee feedback for activity and organizer
+model Feedback {
+    id              String   @id @default(uuid())
+    postId          String
+    fromUserId      String // who submitted the feedback
+    activityRating  Int // 1–5 stars for the activity
+    organizerRating Int // 1–5 stars for the organizer
+    comment         String? // optional text feedback / suggestion
+    createdAt       DateTime @default(now())
+
+    // Relations
+    post Post @relation("PostFeedbacks", fields: [postId], references: [id], onDelete: Cascade)
+
+    // A user can only submit one feedback per post
+    @@unique([postId, fromUserId])
+    @@index([postId])
+    @@map("feedbacks")
 }
 
 // GlobalMessage entity - app-wide lobby chat visible to all players

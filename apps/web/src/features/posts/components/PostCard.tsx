@@ -51,9 +51,9 @@ export function PostCard({ post }: PostCardProps) {
   const isToday = eventTime.toDateString() === now.toDateString();
   const isSoon = hoursRemaining <= 24 && hoursRemaining > 0;
   const isVeryUrgent = hoursRemaining <= 6 && hoursRemaining > 0;
-  const maxPlayers = 6; // Default max players for activities
-  const fillPercentage = (post.memberCount / maxPlayers) * 100;
-  const almostFull = post.memberCount >= 4; // heuristic
+  const maxPlayers = post.requiredParticipants;
+  const fillPercentage = Math.min((post.memberCount / maxPlayers) * 100, 100);
+  const almostFull = post.memberCount >= Math.ceil(maxPlayers * 0.75);
 
   return (
     <Card className="flex flex-col h-full overflow-hidden border border-purple-300 hover:shadow-lg transition-shadow">
@@ -92,7 +92,7 @@ export function PostCard({ post }: PostCardProps) {
             <div className="flex items-center gap-2 text-slate-700 font-semibold">
               <Users className="w-4 h-4" />
               <span>
-                {post.memberCount}/{maxPlayers} Players
+                {post.memberCount}/{maxPlayers} Joinees
               </span>
             </div>
             {almostFull && (
@@ -131,6 +131,16 @@ export function PostCard({ post }: PostCardProps) {
             <TrendingUp className="w-3 h-3" />
             {post.activityType}
           </span>
+          {post.vibe && (
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-purple-700 bg-purple-50 px-3 py-1.5 rounded-lg border border-purple-200">
+              {post.vibe === 'Chill' && '😌'}
+              {post.vibe === 'Energetic' && '⚡'}
+              {post.vibe === 'Creative' && '🎨'}
+              {post.vibe === 'Networking' && '🤝'}
+              {post.vibe === 'Fun' && '🎉'}
+              {post.vibe}
+            </span>
+          )}
           {joinedCount > 0 && (
             <span className="inline-flex items-center gap-1 text-xs font-bold text-green-700 bg-green-100 px-3 py-1.5 rounded-lg border border-green-300">
               <CheckCircle className="w-3 h-3" />
@@ -138,6 +148,30 @@ export function PostCard({ post }: PostCardProps) {
             </span>
           )}
         </div>
+
+        {/* Description snippet */}
+        {post.description && (
+          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">{post.description}</p>
+        )}
+
+        {/* Roles needed pills */}
+        {post.rolesNeeded && post.rolesNeeded.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {post.rolesNeeded.slice(0, 3).map((r, i) => (
+              <span
+                key={i}
+                className="text-xs text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full"
+              >
+                {r.role} ×{r.count}
+              </span>
+            ))}
+            {post.rolesNeeded.length > 3 && (
+              <span className="text-xs text-slate-400 px-1">
+                +{post.rolesNeeded.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Creator info */}
         <div className="text-xs text-slate-500 border-t border-slate-100 pt-2">

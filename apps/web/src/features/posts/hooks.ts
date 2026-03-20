@@ -7,7 +7,13 @@
 import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '../../lib/api-config';
-import type { NearbyPostsParams, CreatePostInput, JoinPostInput, PostMessage } from './types';
+import type {
+  NearbyPostsParams,
+  CreatePostInput,
+  JoinPostInput,
+  PostMessage,
+  CreateFeedbackInput,
+} from './types';
 import {
   fetchNearbyPosts,
   createPost,
@@ -16,6 +22,10 @@ import {
   fetchPostMembers,
   fetchMessages,
   sendMessage,
+  fetchFeedbackSummary,
+  submitFeedback,
+  checkFeedbackSubmitted,
+  fetchPendingFeedback,
 } from './api';
 
 /**
@@ -149,5 +159,53 @@ export function useSendMessage(postId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: postKeys.messages(postId) });
     },
+  });
+}
+
+/**
+ * Hook to fetch feedback summary for a post
+ */
+export function useFeedbackSummary(postId: string) {
+  return useQuery({
+    queryKey: ['feedback', postId],
+    queryFn: () => fetchFeedbackSummary(postId),
+  });
+}
+
+/**
+ * Hook to check if current user has submitted feedback
+ */
+export function useHasSubmittedFeedback(postId: string, userId: string) {
+  return useQuery({
+    queryKey: ['feedback-check', postId, userId],
+    queryFn: () => checkFeedbackSubmitted(postId, userId),
+    enabled: !!postId && !!userId,
+  });
+}
+
+/**
+ * Hook to submit feedback for a post
+ */
+export function useSubmitFeedback(postId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: CreateFeedbackInput) => submitFeedback(postId, input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['feedback', postId] });
+      queryClient.invalidateQueries({ queryKey: ['feedback-check', postId] });
+    },
+  });
+}
+
+/**
+ * Hook to fetch pending feedback items for a user (completed activities not yet rated)
+ */
+export function usePendingFeedback(userId: string) {
+  return useQuery({
+    queryKey: ['pending-feedback', userId],
+    queryFn: () => fetchPendingFeedback(userId),
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 min
   });
 }

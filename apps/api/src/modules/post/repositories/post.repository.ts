@@ -14,10 +14,14 @@ import { PrismaService } from '../../../infrastructure/database/prisma.service';
  */
 export interface CreatePostData {
   title: string;
+  description?: string;
   activityType: string;
+  vibe?: string;
   latitude: number;
   longitude: number;
   scheduledTime: Date;
+  requiredParticipants: number;
+  rolesNeeded?: { role: string; count: number }[];
   createdById: string;
 }
 

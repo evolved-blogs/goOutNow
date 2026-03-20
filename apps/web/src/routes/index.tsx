@@ -6,6 +6,7 @@
 import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { NearbyPostsList } from '@/features/posts/components/NearbyPostsList';
+import { PendingFeedbackModal } from '@/features/posts/components/PendingFeedbackModal';
 
 // Fallback center (Chennai)
 const DEFAULT_LOCATION = { latitude: 13.0827, longitude: 80.2707 };
@@ -32,6 +33,9 @@ function IndexPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
+      {/* Proactive feedback modal — shows when user has unrated past activities */}
+      <PendingFeedbackModal userId={window.userId} />
+
       <div className="space-y-8 max-w-6xl mx-auto">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-slate-900">Discover Activities Near You</h2>

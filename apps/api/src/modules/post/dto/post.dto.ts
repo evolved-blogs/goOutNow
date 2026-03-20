@@ -4,21 +4,48 @@
  * Using class-validator decorators for automatic validation
  */
 
-import { IsString, IsNotEmpty, IsNumber, IsDateString, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsDateString,
+  IsInt,
+  Min,
+  Max,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
-/**
- * DTO for creating a new post
- * Validates all required fields for post creation
- */
+/** A single role entry e.g. { role: "Guitarist", count: 2 } */
+export class RoleNeededDto {
+  @IsString()
+  @IsNotEmpty()
+  role: string;
+
+  @IsInt()
+  @Min(1)
+  count: number;
+}
+
+/** DTO for creating a new post */
 export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   title: string;
 
+  @IsOptional()
+  @IsString()
+  description?: string;
+
   @IsString()
   @IsNotEmpty()
   activityType: string;
+
+  @IsOptional()
+  @IsString()
+  vibe?: string;
 
   @IsNumber()
   @Min(-90)
@@ -33,15 +60,23 @@ export class CreatePostDto {
   @IsDateString()
   scheduledTime: string;
 
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  requiredParticipants: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RoleNeededDto)
+  rolesNeeded?: RoleNeededDto[];
+
   @IsString()
   @IsNotEmpty()
   createdById: string;
 }
 
-/**
- * DTO for fetching nearby posts
- * Requires user's current location
- */
+/** DTO for fetching nearby posts — requires user location */
 export class GetNearbyPostsDto {
   @Type(() => Number)
   @IsNumber()
@@ -56,43 +91,38 @@ export class GetNearbyPostsDto {
   longitude: number;
 }
 
-/**
- * DTO for joining a post
- */
+/** DTO for joining a post */
 export class JoinPostDto {
   @IsString()
   @IsNotEmpty()
   userId: string;
 }
 
-/**
- * Response DTO for post with distance information
- * Used when returning nearby posts
- */
+/** Response DTO for nearby posts (includes distance) */
 export class PostWithDistanceDto {
   id: string;
   title: string;
+  description?: string;
   activityType: string;
+  vibe?: string;
   latitude: number;
   longitude: number;
   scheduledTime: Date;
+  requiredParticipants: number;
+  rolesNeeded?: RoleNeededDto[];
   createdById: string;
-  distance: number; // Distance in kilometers
+  distance: number;
   memberCount: number;
   createdAt: Date;
 }
 
-/**
- * DTO for a single post member
- */
+/** DTO for a single post member */
 export class PostMemberDto {
   userId: string;
   joinedAt: Date;
 }
 
-/**
- * DTO for a chat message on a post
- */
+/** DTO for a chat message */
 export class MessageDto {
   id: string;
   postId: string;
@@ -101,9 +131,7 @@ export class MessageDto {
   createdAt: Date;
 }
 
-/**
- * DTO for sending a message
- */
+/** DTO for sending a message */
 export class SendMessageDto {
   @IsString()
   @IsNotEmpty()
@@ -114,16 +142,18 @@ export class SendMessageDto {
   text: string;
 }
 
-/**
- * Standard post response DTO
- */
+/** Standard post response DTO */
 export class PostResponseDto {
   id: string;
   title: string;
+  description?: string;
   activityType: string;
+  vibe?: string;
   latitude: number;
   longitude: number;
   scheduledTime: Date;
+  requiredParticipants: number;
+  rolesNeeded?: RoleNeededDto[];
   createdById: string;
   memberCount: number;
   createdAt: Date;

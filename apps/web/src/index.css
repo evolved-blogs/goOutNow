@@ -1,5 +1,52 @@
 @import 'tailwindcss';
 
+/* shadcn/ui CSS variables */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 262.1 83.3% 57.8%;
+  --radius: 0.5rem;
+}
+
+/* ── Leaflet z-index containment ────────────────────────────────────────────
+   Leaflet's CSS sets z-index up to 1000 on panes/controls.  The isolation
+   wrapper in CreatePostForm (isolation:isolate + z-index:0) creates a new
+   stacking context that traps those values inside.  These rules reinforce
+   that nothing inside .leaflet-container escapes above page-level overlays
+   (modals, popovers, dropdowns) which sit at z-50 / z-50+ in Tailwind.   */
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-pane,
+.leaflet-overlay-pane,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-tooltip-pane,
+.leaflet-popup-pane {
+  z-index: auto;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1;
+}
+
 /* Base responsive styles */
 * {
   box-sizing: border-box;

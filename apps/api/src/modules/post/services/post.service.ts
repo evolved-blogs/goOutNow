@@ -39,10 +39,14 @@ export class PostService {
     // Convert DTO to repository format
     const postData = {
       title: createPostDto.title,
+      description: createPostDto.description,
       activityType: createPostDto.activityType,
+      vibe: createPostDto.vibe,
       latitude: createPostDto.latitude,
       longitude: createPostDto.longitude,
       scheduledTime: new Date(createPostDto.scheduledTime),
+      requiredParticipants: createPostDto.requiredParticipants,
+      rolesNeeded: createPostDto.rolesNeeded ?? [],
       createdById: createPostDto.createdById,
     };
 
@@ -80,12 +84,16 @@ export class PostService {
     return nearestPosts.map((result: { entity: PostWithMembers; distance: number }) => ({
       id: result.entity.id,
       title: result.entity.title,
+      description: (result.entity as any).description ?? undefined,
       activityType: result.entity.activityType,
+      vibe: (result.entity as any).vibe ?? undefined,
       latitude: result.entity.latitude,
       longitude: result.entity.longitude,
       scheduledTime: result.entity.scheduledTime,
+      requiredParticipants: (result.entity as any).requiredParticipants ?? 2,
+      rolesNeeded: (result.entity as any).rolesNeeded ?? [],
       createdById: result.entity.createdById,
-      distance: Math.round(result.distance * 100) / 100, // Round to 2 decimal places
+      distance: Math.round(result.distance * 100) / 100,
       memberCount: result.entity._count.members,
       createdAt: result.entity.createdAt,
     }));
@@ -205,10 +213,14 @@ export class PostService {
     return {
       id: post.id,
       title: post.title,
+      description: (post as any).description ?? undefined,
       activityType: post.activityType,
+      vibe: (post as any).vibe ?? undefined,
       latitude: post.latitude,
       longitude: post.longitude,
       scheduledTime: post.scheduledTime,
+      requiredParticipants: (post as any).requiredParticipants ?? 2,
+      rolesNeeded: (post as any).rolesNeeded ?? [],
       createdById: post.createdById,
       memberCount: post._count.members,
       createdAt: post.createdAt,

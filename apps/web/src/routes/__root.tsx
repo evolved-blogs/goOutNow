@@ -12,7 +12,7 @@ export const Route = createRootRoute({
                   className="flex items-center gap-3 cursor-pointer"
                   onClick={() => (window.location.href = '/')}
                 >
-                  <img src="/src/assets/logo.svg" alt="GoOutNow logo" className="w-10 h-10" />
+                  <img src="/logo.svg" alt="GoOutNow logo" className="w-10 h-10" />
                   <span className="text-2xl font-bold text-slate-900">GoOutNow</span>
                 </div>
                 <div className="flex gap-4 flex-wrap">

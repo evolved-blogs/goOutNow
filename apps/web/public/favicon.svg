@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true"><defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#8B5CF6"></stop>
+      <stop offset="100%" stop-color="#6D28D9"></stop>
+    </linearGradient>
+  </defs><rect width="120" height="120" rx="20" fill="url(#g)"></rect><g transform="translate(20,20)" fill="#fff">
+    <!-- Pin shape -->
+    <path d="M40 4C28.9543 4 20 12.9543 20 24C20 38 40 64 40 64C40 64 60 38 60 24C60 12.9543 51.0457 4 40 4ZM40 32C34.4772 32 30 27.5228 30 22C30 16.4772 34.4772 12 40 12C45.5228 12 50 16.4772 50 22C50 27.5228 45.5228 32 40 32Z"></path>
+    <!-- G lettermark -->
+    <path d="M8 84C11 76 19 68 32 68H46V58H32C16 58 6 72 6 84V84H8Z" transform="translate(0,-8)"></path>
+  </g></svg>

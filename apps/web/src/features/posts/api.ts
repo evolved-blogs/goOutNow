@@ -98,6 +98,15 @@ export async function fetchPostMembers(postId: string): Promise<PostMember[]> {
 }
 
 /**
+ * Fetches all posts created by a specific user
+ */
+export async function fetchUserPosts(userId: string): Promise<Post[]> {
+  const response = await fetch(API_ENDPOINTS.posts.byUser(userId));
+  if (!response.ok) throw new Error('Failed to fetch user posts');
+  return response.json();
+}
+
+/**
  * Fetches all chat messages for a post
  */
 export async function fetchMessages(postId: string): Promise<PostMessage[]> {

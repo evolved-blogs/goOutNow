@@ -5,11 +5,15 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 export const API_ENDPOINTS = {
+  auth: {
+    login: `${API_BASE_URL}/auth/login`,
+  },
   posts: {
     list: `${API_BASE_URL}/posts`,
     nearby: (lat: number, lng: number) =>
       `${API_BASE_URL}/posts/nearby?latitude=${lat}&longitude=${lng}`,
     byId: (id: string) => `${API_BASE_URL}/posts/${id}`,
+    byUser: (userId: string) => `${API_BASE_URL}/posts/user/${userId}`,
     join: (id: string) => `${API_BASE_URL}/posts/${id}/join`,
     members: (id: string) => `${API_BASE_URL}/posts/${id}/members`,
     messages: (id: string) => `${API_BASE_URL}/posts/${id}/messages`,
@@ -25,5 +29,10 @@ export const API_ENDPOINTS = {
     list: `${API_BASE_URL}/chat`,
     send: `${API_BASE_URL}/chat`,
     stream: `${API_BASE_URL}/chat/stream`,
+  },
+  users: {
+    profile: (id: string) => `${API_BASE_URL}/users/${id}`,
+    update: (id: string) => `${API_BASE_URL}/users/${id}`,
+    activity: (id: string) => `${API_BASE_URL}/users/${id}/activity`,
   },
 } as const;

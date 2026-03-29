@@ -11,9 +11,11 @@ import type { NearbyPostsParams } from '../types';
 
 interface NearbyPostsListProps {
   location: NearbyPostsParams;
+  /** Pass true when the parent already renders the count/section header */
+  hideHeader?: boolean;
 }
 
-export function NearbyPostsList({ location }: NearbyPostsListProps) {
+export function NearbyPostsList({ location, hideHeader = false }: NearbyPostsListProps) {
   const { data: posts, isLoading, isError, error } = useNearbyPosts(location);
 
   if (isLoading) {
@@ -36,10 +38,10 @@ export function NearbyPostsList({ location }: NearbyPostsListProps) {
     );
   }
 
-  // Filter out past posts (hide old posts automatically)
-  const upcoming = (posts || []).filter((p) => new Date(p.scheduledTime) > new Date());
+  // Show all posts returned by the API (filtering by date is optional — past entries still give context)
+  const items = posts || [];
 
-  if (!upcoming || upcoming.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="text-center py-12">
         <MapPin className="w-12 h-12 mx-auto text-slate-300" />
@@ -51,11 +53,16 @@ export function NearbyPostsList({ location }: NearbyPostsListProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-slate-900">
-        {upcoming.length} {upcoming.length === 1 ? 'Activity' : 'Activities'} Near You
-      </h2>
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-        {upcoming.map((post) => (
+      {!hideHeader && (
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-bold text-slate-800">
+            {items.length} {items.length === 1 ? 'Activity' : 'Activities'} Near You
+          </h2>
+        </div>
+      )}
+      {/* 1 col mobile → 2 col sm → 3 col lg → 4 col xl */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {items.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>

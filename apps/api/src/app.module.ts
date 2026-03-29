@@ -10,6 +10,8 @@ import { PostModule } from './modules/post/post.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     DatabaseModule,
 
     // Feature modules
+    AuthModule,
+    UsersModule,
     PostModule,
     ChatModule,
     FeedbackModule,

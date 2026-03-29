@@ -11,6 +11,18 @@ datasource db {
 }
 
 // User entity - represents users who can create and join posts
+model User {
+    id          String   @id @default(uuid())
+    phoneNumber String   @unique
+    displayName String?
+    bio         String?
+    avatarUrl   String?
+    interests   String[]
+    createdAt   DateTime @default(now())
+
+    @@index([phoneNumber])
+    @@map("users")
+}
 
 // Post entity - represents location-based activities
 // Stores geospatial coordinates for proximity searches

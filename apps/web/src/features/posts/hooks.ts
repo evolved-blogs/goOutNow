@@ -20,6 +20,7 @@ import {
   joinPost,
   fetchPostById,
   fetchPostMembers,
+  fetchUserPosts,
   fetchMessages,
   sendMessage,
   fetchFeedbackSummary,
@@ -37,6 +38,7 @@ export const postKeys = {
   detail: (id: string) => [...postKeys.all, 'detail', id] as const,
   members: (id: string) => [...postKeys.all, 'members', id] as const,
   messages: (id: string) => [...postKeys.all, 'messages', id] as const,
+  byUser: (userId: string) => [...postKeys.all, 'byUser', userId] as const,
 };
 
 /**
@@ -59,6 +61,17 @@ export function usePost(id: string) {
     queryKey: postKeys.detail(id),
     queryFn: () => fetchPostById(id),
     enabled: Boolean(id),
+  });
+}
+
+/**
+ * Hook to fetch all posts created by a specific user
+ */
+export function useUserPosts(userId: string) {
+  return useQuery({
+    queryKey: postKeys.byUser(userId),
+    queryFn: () => fetchUserPosts(userId),
+    enabled: Boolean(userId),
   });
 }
 
